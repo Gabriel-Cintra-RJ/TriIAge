@@ -1,0 +1,3 @@
+# os scripts rodam dentro de container Linux, então precisam de quebra de linha LF (com CRLF o bash quebra)
+*.sh text eol=lf
+*.sql text eol=lf

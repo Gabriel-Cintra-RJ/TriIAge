@@ -1,0 +1,61 @@
+# Sobe o projeto inteiro: banco (PostgreSQL), backend (FastAPI + JEV) e frontend (Next.js).
+# Rodar daqui da pasta TCC:  docker compose up --build
+
+# De onde vêm as configurações:
+#   - TriIAge-backend/.env  -> usuário/senha do banco e TYPESAFE_API_KEY (o mesmo .env do backend)
+#   - TCC/.env               -> NEXTAUTH_SECRET e AUTH_DEMO_PASSWORD do front (modelo em .env.example)
+
+services:
+  db:
+    image: postgres:17
+    env_file: ./TriIAge-backend/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # criam as tabelas e carregam os CSVs, só na primeira vez (com o volume vazio)
+      - ./TriIAge-backend/database/init:/docker-entrypoint-initdb.d:ro
+      - ./TriIAge-backend/database/csv:/seed:ro
+    healthcheck:
+      # -h 127.0.0.1 de propósito: assim só fica "healthy" depois que a carga dos CSVs terminou
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./TriIAge-backend
+    env_file: ./TriIAge-backend/.env
+    environment:
+      POSTGRES_HOST: db
+      # o navegador acessa o front em localhost:3000; deixo liberado também caso alguém chame a API direto
+      CORS_ORIGINS: '["http://localhost:3000"]'
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # a imagem do python não tem curl, então testo o /health com o próprio python
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: ./TriIAge-main/web
+    environment:
+      # dentro da rede do compose o front acha a API pelo nome do serviço
+      TRIAGE_API_URL: http://api:8000
+      TRIAGE_API_MOCK: "false"
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?defina NEXTAUTH_SECRET no TCC/.env}
+      AUTH_DEMO_PASSWORD: ${AUTH_DEMO_PASSWORD:?defina AUTH_DEMO_PASSWORD no TCC/.env}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  pgdata:
