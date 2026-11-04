@@ -1,45 +1,91 @@
 # 4. Banco de dados e bases de conhecimento
 
-O banco tem três tabelas. Duas são as bases de conhecimento do JEV, que vêm de CSV. A terceira guarda o
-histórico das triagens feitas pela API. A estrutura está em `database/init/01_schema.sql`.
+O banco tem dois grupos de tabelas. Duas são as bases de conhecimento do JEV, que vêm de CSV. As outras
+guardam o atendimento: quem é o paciente, o que ele contou, o que a enfermagem mediu e a receita do médico.
+A estrutura está em `database/init/01_schema.sql` e os dados de exemplo em `database/init/03_demo_data.sql`.
 
-| Tabela | De onde vem | O que guarda | Registros |
-|---|---|---|---|
-| `symptom_urgency` | `database/csv/symptom_urgency.csv` | situações clínicas e o nível de urgência de cada uma | 73 (26 queixas) |
-| `medications` | `database/csv/medications.csv` | medicamentos e as indicações previstas em bula | 90 |
-| `triages` | gerada pela API | cada triagem: entrada, situação escolhida, nível, confiança, modelo | cresce com o uso |
+| Tabela | De onde vem | O que guarda |
+|---|---|---|
+| `symptom_urgency` | `database/csv/symptom_urgency.csv` | situações clínicas e o nível de urgência de cada uma (73 linhas, 26 queixas) |
+| `medications` | `database/csv/medications.csv` | medicamentos e as indicações previstas em bula (90) |
+| `users` | API / dados de exemplo | pacientes e equipe; o campo `role` diz o perfil |
+| `patients` | API / dados de exemplo | dados do paciente: nascimento, sexo, tipo sanguíneo |
+| `encounters` | API | o atendimento: relato do paciente, nível atual (o da última triagem), médico e status |
+| `classifications` | API | cada resposta do JEV: uma na pré-análise do paciente e uma em cada triagem |
+| `triages` | API | cada triagem da enfermagem (a primeira e as retriagens): sinais vitais, classificação, nível que valeu, justificativa |
+| `vital_signs` | API | medições da enfermagem (com `encounter_id`) ou feitas pelo paciente em casa |
+| `prescriptions` / `prescription_items` | API | diagnóstico e receita; cada remédio aponta para a bula quando a gente acha |
+| `health_records` | API | doenças, alergias e cirurgias do paciente (o diagnóstico da consulta entra aqui) |
+| `patient_medications` | API | remédios que o paciente toma ou tomou, com intervalo e período |
+
+O atendimento passa por três status: `waiting_nurse` (paciente mandou os sintomas) → `waiting_doctor`
+(enfermagem mediu os sinais vitais) → `completed` (médico fez o diagnóstico e a receita). Em `waiting_doctor`
+a enfermagem ainda pode fazer retriagens; cada uma vira uma linha nova em `triages`.
 
 ```mermaid
 erDiagram
-    symptom_urgency ||--o{ triages : "symptom_urgency_id"
-    symptom_urgency {
-        varchar id PK
-        text main_symptom
-        text warning_signs
+    users ||--o| patients : "user_id"
+    patients ||--o{ encounters : "patient_id"
+    encounters ||--o{ classifications : "encounter_id"
+    symptom_urgency ||--o{ classifications : "symptom_urgency_id"
+    encounters ||--o{ vital_signs : "encounter_id"
+    encounters ||--o{ triages : "encounter_id"
+    triages ||--|| vital_signs : "vital_signs_id"
+    triages ||--|| classifications : "classification_id"
+    encounters ||--o| prescriptions : "encounter_id"
+    prescriptions ||--o{ prescription_items : "prescription_id"
+    medications ||--o{ prescription_items : "medication_id"
+    patients ||--o{ health_records : "patient_id"
+    patients ||--o{ patient_medications : "patient_id"
+    prescription_items ||--o| patient_medications : "prescription_item_id"
+    users ||--o{ triages : "nurse_id"
+    users ||--o{ encounters : "doctor_id"
+    encounters {
+        bigint id PK
+        bigint patient_id FK
+        varchar status
+        text description
+        jsonb symptoms
         varchar urgency_level
         smallint priority
-        text guidance
-        text source
-    }
-    medications {
-        varchar id PK
-        text name
-        text active_ingredient
-        text therapeutic_indications
-        text dosage_form
-        text leaflet_source
+        bigint doctor_id FK
     }
     triages {
         bigint id PK
-        jsonb input
-        bool matched
-        varchar symptom_urgency_id FK
+        bigint encounter_id FK
+        bigint nurse_id FK
+        bigint vital_signs_id FK
+        bigint classification_id FK
         varchar urgency_level
-        bool escalated
+        text override_reason
+    }
+    classifications {
+        bigint id PK
+        varchar stage
+        jsonb input
+        varchar symptom_urgency_id FK
         float confidence
         bool needs_human_review
     }
+    prescriptions {
+        bigint id PK
+        bigint encounter_id FK
+        bigint doctor_id FK
+        text diagnosis
+        text recommendations
+    }
+    prescription_items {
+        bigint id PK
+        text written_name
+        varchar medication_id FK
+        text dosage
+        text frequency
+        text duration
+    }
 ```
+
+Como as tabelas são criadas pelos scripts de `database/init` só quando o volume está vazio, depois de mudar o
+schema é preciso recriar o banco: `docker compose down -v && docker compose up --build`.
 
 ## Formato dos CSVs
 

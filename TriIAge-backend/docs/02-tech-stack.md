@@ -11,7 +11,7 @@ mundo do grupo instala a mesma coisa.
 
 ## Bibliotecas da aplicação
 
-**FastAPI** é o framework da API. Uma função com `@router.post("/triages")` vira um endpoint. Escolhemos
+**FastAPI** é o framework da API. Uma função com `@router.post("/encounters")` vira um endpoint. Escolhemos
 porque ele valida a entrada pelos tipos do Python e gera sozinho a tela `/docs` (capítulo 6).
 
 **Uvicorn** é o servidor que escuta a porta 8000 e entrega as requisições para o FastAPI. Por isso o
@@ -48,6 +48,6 @@ de converter a resposta em objetos Python. Detalhes no capítulo 5.
 
 ## Infraestrutura
 
-- **PostgreSQL 17**: banco relacional, gratuito, com o tipo `JSONB` que usamos para guardar a entrada de
-  cada triagem.
+- **PostgreSQL 17**: banco relacional, gratuito, com o tipo `JSONB` que usamos para guardar o que foi
+  enviado ao JEV em cada classificação.
 - **Docker e Docker Compose**: sobem a API e o banco juntos (capítulo 3).

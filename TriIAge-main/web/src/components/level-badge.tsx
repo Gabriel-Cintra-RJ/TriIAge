@@ -12,7 +12,7 @@ export function LevelBadge({ priority, size = "sm" }: Props) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-md font-semibold ${sizing} ${level.badge}`}
+      className={`inline-flex items-center whitespace-nowrap rounded-md font-semibold ${sizing} ${level.badge}`}
     >
       <span className="tabular-nums">{priority}</span>
       <span>

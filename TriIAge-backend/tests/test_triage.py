@@ -21,6 +21,16 @@ def test_retrieve_returns_every_severity_tier_of_matching_complaints(symptom_rec
     assert tiers == {"emergency", "very_urgent", "urgent"}
 
 
+def test_conditions_from_history_do_not_push_the_complaint_out(symptom_records):
+    # as doenças agora vêm do histórico; "crise hipertensiva" puxava "crise convulsiva" e a gripe ficava de fora
+    request = payload(description="Estou com febre alta e tosse há 3 dias, com dor no corpo", symptoms=["Febre", "Tosse"],
+                      conditions=["Hipertensão arterial", "Crise hipertensiva com cefaleia"])
+
+    complaints = {r.main_symptom for r in retrieve_candidates(request, symptom_records)}
+
+    assert "Sintomas de gripe" in complaints
+
+
 def test_retrieve_returns_nothing_for_unrelated_text(symptom_records):
     assert retrieve_candidates(payload(description="quero renovar minha carteirinha"), symptom_records) == []
 

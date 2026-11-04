@@ -50,49 +50,62 @@ lista os remédios da base. Pelo terminal: `curl http://localhost:8000/health` n
 ## 6. Testar com o JEV
 
 O jeito mais fácil é pela tela `/docs` (capítulo 6). Pelo terminal, salve o corpo num arquivo em UTF-8, por
-exemplo `triage_test.json`:
+exemplo `encounter_test.json`:
 
 ```json
 {
-  "age": 58,
+  "patient_id": 6,
   "description": "Dor no peito há 30 minutos, com falta de ar e suor frio",
-  "conditions": ["hipertensão"]
+  "pain_score": 8
 }
 ```
 
 e envie:
 
-- cmd: `curl -X POST http://localhost:8000/triages -H "Content-Type: application/json" --data-binary @triage_test.json`
-- PowerShell: `Invoke-RestMethod -Method Post -Uri http://localhost:8000/triages -ContentType "application/json; charset=utf-8" -InFile triage_test.json`
+- cmd: `curl -X POST http://localhost:8000/encounters -H "Content-Type: application/json" --data-binary @encounter_test.json`
+- PowerShell: `Invoke-RestMethod -Method Post -Uri http://localhost:8000/encounters -ContentType "application/json; charset=utf-8" -InFile encounter_test.json`
 
-A resposta da triagem tem mais ou menos este formato (os números variam):
+A resposta é o atendimento aberto, mais ou menos neste formato (os números variam):
 
 ```json
 {
-  "id": 1,
-  "matched": true,
+  "id": 2,
+  "status": "waiting_nurse",
+  "patient_name": "Maria Aparecida Souza",
   "urgency_level": "emergency",
   "priority": 1,
-  "guidance": "Ligue agora para o SAMU 192. ...",
-  "care_timeframe": "Imediato – acionar o SAMU 192",
-  "warning_signs": ["dor no peito em aperto", "falta de ar súbita", "..."],
-  "escalated": false,
-  "confidence": 0.86,
   "needs_human_review": false,
-  "matched_record": { "id": "SYM-00xx", "main_symptom": "Dor no peito", "source": "...", "source_url": "..." },
-  "model": "jev-...",
+  "classifications": [
+    {
+      "stage": "patient",
+      "matched": true,
+      "urgency_level": "emergency",
+      "guidance": "Ligue agora para o SAMU 192. ...",
+      "care_timeframe": "Imediato – acionar o SAMU 192",
+      "warning_signs": ["dor no peito em aperto", "falta de ar súbita", "..."],
+      "escalated": false,
+      "confidence": 0.86,
+      "matched_record": { "id": "SYM-00xx", "main_symptom": "Dor no peito", "source": "...", "source_url": "..." },
+      "model": "jev-..."
+    }
+  ],
+  "nursing": null,
+  "prescription": null,
   "disclaimer": "Informação de apoio ..."
 }
 ```
+
+Os próximos passos são `POST /encounters/{id}/nursing` e `POST /encounters/{id}/prescription` (exemplos no
+capítulo 6).
 
 Para os medicamentos, o mesmo esquema com `POST /medications/lookup` e o corpo
 `{ "medications": ["Dipirona 1g", "Losartana 50mg"] }`. Cada item volta com `found`, `match_method` e os dados
 da bula.
 
-Para ver as triagens gravadas:
+Para ver as classificações gravadas:
 
 ```
-docker exec -it triage_db psql -U SEU_USER -d SEU_DB -c "SELECT id, urgency_level, escalated, confidence FROM triages;"
+docker exec -it triage_db psql -U SEU_USER -d SEU_DB -c "SELECT encounter_id, stage, urgency_level, escalated, confidence FROM classifications;"
 ```
 
 ## 7. Testes automatizados

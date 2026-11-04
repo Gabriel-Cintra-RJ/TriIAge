@@ -57,32 +57,44 @@ uv run pytest
 | Método | Rota | Descrição |
 |---|---|---|
 | GET | `/health` | Verifica a conexão com o banco |
-| POST | `/triages` | Sintomas → nível de urgência e orientação (grava o histórico) |
+| GET | `/users/by-email?email=` | Usuário e perfil (usado pelo login do front) |
+| GET | `/patients/{id}/history` | Histórico do paciente: cadastro, doenças/alergias/cirurgias, remédios, sinais vitais e atendimentos |
+| POST/DELETE | `/patients/{id}/health-records`, `/medications`, `/vital-signs` | Paciente completa o próprio histórico |
+| POST | `/encounters` | Paciente manda os sintomas → pré-análise do JEV (abre o atendimento) |
+| GET | `/encounters?status=&patient_id=` | Filas da enfermagem/médico e lista do paciente |
+| GET | `/encounters/{id}` | Atendimento completo: relato, classificações, triagem e receita |
+| POST | `/encounters/{id}/nursing` | Enfermagem manda os sinais vitais → JEV classifica de novo (pode repetir: retriagem) |
+| GET | `/dashboard?user_id=` | Números das telas iniciais (filas, graves esperando, triagens do dia, estatísticas do JEV) |
+| POST | `/encounters/{id}/prescription` | Médico manda diagnóstico e receita → atendimento finalizado |
 | GET | `/medications` | Lista os medicamentos da base |
-| POST | `/medications/lookup` | Medicamentos da receita → indicações em bula |
+| POST | `/medications/lookup` | Nomes de remédios → indicações em bula |
 
-### `POST /triages`
+### O atendimento
 
-```json
-{
-  "age": 58,
-  "sex": "M",
-  "description": "Dor no peito há 30 minutos, com falta de ar e suor frio",
-  "symptoms": ["falta de ar"],
-  "conditions": ["hipertensão"],
-  "vital_signs": { "heart_rate": 125 }
-}
-```
+1. **Paciente** (`POST /encounters`): manda o relato, os sintomas, desde quando e a dor (0 a 10). A API junta
+   com o histórico dele (idade, sexo, doenças, alergias, remédios em uso), busca na base as queixas parecidas
+   e manda todas as faixas de gravidade dessas queixas ao JEV, que escolhe a que corresponde (ou `none`). Se
+   uma faixa mais grave também for plausível (probabilidade ≥ 20%), ela prevalece (`escalated: true`).
+   Confiança abaixo de `MIN_CONFIDENCE` marca `needs_human_review: true`. Status: `waiting_nurse`.
+2. **Enfermagem** (`POST /encounters/{id}/nursing`): manda os sinais vitais (pressão, FC, FR, temperatura,
+   SpO₂, glicemia), a dor avaliada e observações. O JEV classifica de novo com esses dados. A enfermagem pode
+   escolher outro nível, mas aí a justificativa (mínimo 10 caracteres) é obrigatória. Status: `waiting_doctor`.
+   Enquanto o médico não atendeu, a enfermagem pode refazer a triagem (por exemplo, se o paciente piorou na
+   espera). Cada triagem é uma linha nova na tabela `triages`; as anteriores não são alteradas e o nível do
+   atendimento passa a ser o da última.
+3. **Médico** (`POST /encounters/{id}/prescription`): manda o diagnóstico, observações clínicas,
+   recomendações e os remédios da receita (nome como ele escreveu, dose, intervalo, duração). Cada remédio é
+   procurado na base de bulas (pelo nome ou pelo JEV). O diagnóstico e os remédios entram no histórico do
+   paciente. Status: `completed`.
 
-Como funciona: a API busca na base as queixas parecidas com o relato e envia todas as faixas de gravidade
-dessas queixas ao JEV, que escolhe a que corresponde (ou `none`). Se uma faixa mais grave também for
-plausível (probabilidade ≥ 20%), ela prevalece (`escalated: true`). Confiança abaixo de `MIN_CONFIDENCE`
-marca `needs_human_review: true`. Sem correspondência, `matched: false` e a orientação diz que não há
-informação suficiente.
+Cada classificação fica salva em `classifications` (a pré-análise e uma por triagem), então dá para comparar
+a pré-análise com as da enfermagem.
 
-Resposta (resumida): `urgency_level` (`emergency`, `very_urgent`, `urgent`, `less_urgent`,
-`guided_self_care`), `priority` (1–5), `guidance`, `care_timeframe`, `warning_signs`, `matched_record`
-(com a fonte) e `disclaimer`.
+### Dados de exemplo
+
+O `database/init/03_demo_data.sql` cria a equipe e a paciente Maria Aparecida Souza (`paciente@triiage.local`),
+com hipertensão, alergia a dipirona, medições de pressão feitas em casa e um atendimento de setembro já
+finalizado, com receita e com uma retriagem (a febre subiu enquanto ela esperava). A senha das contas é o `AUTH_DEMO_PASSWORD` do front.
 
 ### `POST /medications/lookup`
 

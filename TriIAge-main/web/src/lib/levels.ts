@@ -25,6 +25,14 @@ export const LEVEL_MEANING: Record<number, string> = {
   5: "Cuidados em casa, com critérios para procurar atendimento",
 };
 
+export const LEVEL_BY_PRIORITY = {
+  1: "emergency",
+  2: "very_urgent",
+  3: "urgent",
+  4: "less_urgent",
+  5: "guided_self_care",
+} as const;
+
 export function levelStyle(priority: number): LevelStyle {
   return LEVELS[priority] ?? { color: "—", label: "Sem nível", badge: "bg-muted text-foreground" };
 }

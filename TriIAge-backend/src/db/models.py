@@ -10,7 +10,7 @@ from typing import Any
 
 from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -64,10 +64,59 @@ class Medication(Base):
     reference_date: Mapped[date]
 
 
-class Triage(Base):
-    __tablename__ = "triages"
+class User(Base):
+    __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    email: Mapped[str]
+    role: Mapped[str] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
+class Patient(Base):
+    __tablename__ = "patients"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    birth_date: Mapped[date]
+    sex: Mapped[str | None] = mapped_column(String(5))
+    blood_type: Mapped[str | None] = mapped_column(String(3))
+    phone: Mapped[str | None]
+
+    user: Mapped[User] = relationship(lazy="joined")
+
+
+class Encounter(Base):
+    __tablename__ = "encounters"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.user_id"))
+    status: Mapped[str] = mapped_column(String(20), default="waiting_nurse")
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    description: Mapped[str]
+    symptoms: Mapped[list[str]] = mapped_column(JSONB, default=list)
+    onset: Mapped[str | None]
+    pain_score: Mapped[int | None]
+    pregnant: Mapped[bool] = mapped_column(default=False)
+    urgency_level: Mapped[str | None] = mapped_column(String(30))
+    priority: Mapped[int | None]
+    needs_human_review: Mapped[bool] = mapped_column(default=True)
+    doctor_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+    completed_at: Mapped[datetime | None]
+
+    patient: Mapped[Patient] = relationship(lazy="joined")
+    doctor: Mapped[User | None] = relationship()
+    classifications: Mapped[list["Classification"]] = relationship(order_by="Classification.id")
+    triages: Mapped[list["Triage"]] = relationship(order_by="Triage.id")
+    prescription: Mapped["Prescription | None"] = relationship(back_populates="encounter")
+
+
+class Classification(Base):
+    __tablename__ = "classifications"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    encounter_id: Mapped[int] = mapped_column(ForeignKey("encounters.id"))
+    stage: Mapped[str] = mapped_column(String(10))
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     input: Mapped[dict[str, Any]] = mapped_column(JSONB)
     matched: Mapped[bool]
@@ -78,3 +127,109 @@ class Triage(Base):
     probabilities: Mapped[dict[str, float] | None] = mapped_column(JSONB)
     needs_human_review: Mapped[bool]
     model: Mapped[str | None] = mapped_column(String(50))
+
+    record: Mapped[SymptomUrgency | None] = relationship(lazy="joined")
+
+
+class VitalSignsRecord(Base):
+    __tablename__ = "vital_signs"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.user_id"))
+    encounter_id: Mapped[int | None] = mapped_column(ForeignKey("encounters.id"))
+    recorded_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    recorded_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    systolic_bp: Mapped[int | None]
+    diastolic_bp: Mapped[int | None]
+    heart_rate: Mapped[int | None]
+    respiratory_rate: Mapped[int | None]
+    temperature: Mapped[float | None]
+    oxygen_saturation: Mapped[int | None]
+    blood_glucose: Mapped[int | None]
+    pain_score: Mapped[int | None]
+
+    recorder: Mapped[User] = relationship(lazy="joined")
+
+
+class Triage(Base):
+    __tablename__ = "triages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    encounter_id: Mapped[int] = mapped_column(ForeignKey("encounters.id"))
+    nurse_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    vital_signs_id: Mapped[int] = mapped_column(ForeignKey("vital_signs.id"))
+    classification_id: Mapped[int] = mapped_column(ForeignKey("classifications.id"))
+    urgency_level: Mapped[str | None] = mapped_column(String(30))
+    override_reason: Mapped[str | None]
+    notes: Mapped[str | None]
+
+    nurse: Mapped[User] = relationship(lazy="joined")
+    vital_signs: Mapped[VitalSignsRecord] = relationship(lazy="joined")
+    classification: Mapped[Classification] = relationship(lazy="joined")
+
+
+class Prescription(Base):
+    __tablename__ = "prescriptions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    encounter_id: Mapped[int] = mapped_column(ForeignKey("encounters.id"))
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.user_id"))
+    doctor_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    diagnosis: Mapped[str]
+    clinical_notes: Mapped[str | None]
+    recommendations: Mapped[str | None]
+
+    encounter: Mapped[Encounter] = relationship(back_populates="prescription")
+    doctor: Mapped[User] = relationship(lazy="joined")
+    items: Mapped[list["PrescriptionItem"]] = relationship(order_by="PrescriptionItem.id")
+
+
+class PrescriptionItem(Base):
+    __tablename__ = "prescription_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    prescription_id: Mapped[int] = mapped_column(ForeignKey("prescriptions.id"))
+    written_name: Mapped[str]
+    medication_id: Mapped[str | None] = mapped_column(ForeignKey("medications.id"))
+    match_method: Mapped[str] = mapped_column(String(10))
+    dosage: Mapped[str | None]
+    frequency: Mapped[str | None]
+    duration: Mapped[str | None]
+    instructions: Mapped[str | None]
+
+    medication: Mapped[Medication | None] = relationship(lazy="joined")
+
+
+class HealthRecord(Base):
+    __tablename__ = "health_records"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.user_id"))
+    category: Mapped[str] = mapped_column(String(20))
+    description: Mapped[str]
+    started_on: Mapped[date | None]
+    ended_on: Mapped[date | None]
+    notes: Mapped[str | None]
+    encounter_id: Mapped[int | None] = mapped_column(ForeignKey("encounters.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    encounter: Mapped[Encounter | None] = relationship()
+
+
+class PatientMedication(Base):
+    __tablename__ = "patient_medications"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.user_id"))
+    name: Mapped[str]
+    dosage: Mapped[str | None]
+    frequency: Mapped[str | None]
+    started_on: Mapped[date | None]
+    ended_on: Mapped[date | None]
+    notes: Mapped[str | None]
+    prescription_item_id: Mapped[int | None] = mapped_column(ForeignKey("prescription_items.id"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    prescription_item: Mapped[PrescriptionItem | None] = relationship()

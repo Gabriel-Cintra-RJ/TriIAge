@@ -20,7 +20,7 @@ INSTRUCTIONS = (
     "vitais, idade, gestação e doenças prévias. Na dúvida entre duas situações, escolha a mais grave. Se "
     "nenhuma corresponder ao relato, escolha 'none'."
 )
-MAX_GROUPS = 3          # quantas queixas mandamos pro JEV em cada triagem
+MAX_GROUPS = 5          # quantas queixas mandamos pro JEV em cada triagem (com 3, as doenças do histórico às vezes tiravam a queixa certa)
 MIN_SCORE = 3           # abaixo disso a gente considera que a base não tem nada sobre o relato
 ESCALATION_PROB = 0.2   # se uma opção mais grave tiver pelo menos 20%, ela ganha
 

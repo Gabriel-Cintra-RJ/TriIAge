@@ -21,9 +21,10 @@ export const authOptions: NextAuthOptions = {
         email: { label: "E-mail", type: "email" },
         password: { label: "Senha", type: "password" },
       },
-      authorize(credentials) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
-        return verifyDemoUser(credentials.email, credentials.password);
+        const user = await verifyDemoUser(credentials.email, credentials.password);
+        return user && { id: String(user.id), name: user.name, email: user.email, role: user.role };
       },
     }),
   ],
@@ -43,7 +44,8 @@ export const authOptions: NextAuthOptions = {
 };
 
 export type CurrentUser = {
-  id: string;
+  /** id da tabela users da API */
+  id: number;
   name: string;
   role: Role;
 };
@@ -51,8 +53,8 @@ export type CurrentUser = {
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const session = await getServerSession(authOptions);
   const user = session?.user;
-  if (!user || !isRole(user.role)) return null;
-  return { id: user.id, name: user.name ?? "", role: user.role };
+  if (!user || !isRole(user.role) || !Number(user.id)) return null;
+  return { id: Number(user.id), name: user.name ?? "", role: user.role };
 }
 
 export async function requireUser(): Promise<CurrentUser> {

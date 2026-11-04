@@ -2,6 +2,7 @@
 // Usado tanto pelo proxy (bloqueio de rota) quanto pela navegação.
 
 export const ROLES = [
+  "PACIENTE",
   "RECEPCIONISTA",
   "ENFERMEIRO",
   "MEDICO",
@@ -12,6 +13,7 @@ export const ROLES = [
 export type Role = (typeof ROLES)[number];
 
 export const ROLE_LABELS: Record<Role, string> = {
+  PACIENTE: "Paciente",
   RECEPCIONISTA: "Recepção",
   ENFERMEIRO: "Enfermagem",
   MEDICO: "Médico(a)",
@@ -26,9 +28,11 @@ export type NavArea = {
 };
 
 export const AREAS: NavArea[] = [
-  { href: "/triagem/nova", label: "Nova triagem", roles: ["RECEPCIONISTA", "ENFERMEIRO"] },
-  { href: "/fila", label: "Fila", roles: ["RECEPCIONISTA", "ENFERMEIRO"] },
-  { href: "/alta", label: "Orientações de alta", roles: ["MEDICO"] },
+  { href: "/avaliacao", label: "Nova avaliação", roles: ["PACIENTE"] },
+  { href: "/atendimentos", label: "Meus atendimentos", roles: ["PACIENTE"] },
+  { href: "/historico", label: "Meu histórico", roles: ["PACIENTE"] },
+  { href: "/fila", label: "Fila de triagem", roles: ["RECEPCIONISTA", "ENFERMEIRO"] },
+  { href: "/consultas", label: "Consultas", roles: ["MEDICO"] },
   { href: "/auditoria", label: "Auditoria", roles: ["AUDITOR"] },
   { href: "/governanca", label: "Governança do modelo", roles: ["GESTOR_CLINICO"] },
 ];

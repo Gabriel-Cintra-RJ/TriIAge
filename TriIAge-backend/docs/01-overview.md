@@ -33,33 +33,37 @@ flowchart LR
 A API e o banco rodam em containers Docker na nossa máquina. O JEV é um serviço externo, acessado pela
 internet com a SDK `typesafe-sdk`.
 
-## O caminho de uma triagem
+## O caminho de um atendimento
 
 ```mermaid
 sequenceDiagram
-    participant F as Next.js
+    participant P as Paciente (app)
+    participant E as Enfermagem
+    participant M as Médico
     participant A as API
-    participant DB as PostgreSQL
     participant J as JEV
 
-    F->>A: POST /triages (idade, relato, sintomas...)
-    A->>DB: lê a base symptom_urgency
-    A->>A: separa as queixas parecidas com o relato
+    P->>A: POST /encounters (relato, sintomas, dor)
+    A->>A: junta com o histórico e separa as queixas parecidas
     A->>J: "qual destas situações é a da pessoa?"
     J-->>A: situação escolhida + probabilidades
-    A->>A: regra conservadora (sobe o nível se precisar)
-    A->>DB: grava em triages
-    A-->>F: nível de urgência, orientação e fonte
+    A-->>P: nível de urgência e onde procurar atendimento
+    E->>A: POST /encounters/{id}/nursing (sinais vitais)
+    A->>J: classifica de novo, agora com os sinais vitais
+    A-->>E: nível final (ou o que a enfermagem escolheu, com justificativa)
+    M->>A: POST /encounters/{id}/prescription (diagnóstico e receita)
+    A->>A: procura cada remédio na base de bulas
+    A-->>P: receita com o detalhe de cada remédio
 ```
 
-1. O Pydantic valida o JSON. Idade negativa, por exemplo, já volta com erro `422`.
-2. A API procura na base as queixas parecidas com o relato (busca simples por palavras) e pega todas as
-   faixas de gravidade delas. Para "dor no peito com falta de ar", vêm as faixas de dor no peito e de falta
-   de ar.
+1. O Pydantic valida o JSON. Dor maior que 10, por exemplo, já volta com erro `422`.
+2. A API pega o histórico do paciente (idade, doenças, alergias, remédios em uso) e procura na base as queixas
+   parecidas com o relato (busca simples por palavras). Pega todas as faixas de gravidade delas.
 3. Essas faixas vão para o JEV como opções, junto com os dados da pessoa. Ele escolhe uma, ou diz que
    nenhuma serve.
 4. Se uma faixa mais grave também parecer plausível, ela ganha. Preferimos errar para o lado mais seguro.
-5. A triagem fica salva na tabela `triages`.
+5. Na enfermagem acontece a mesma coisa, mas com os sinais vitais. As duas classificações ficam salvas na
+   tabela `classifications`.
 6. Se nada na base bater com o relato, a resposta diz que não temos informação suficiente e orienta procurar
    um profissional. Não tentamos adivinhar.
 

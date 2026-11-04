@@ -47,7 +47,6 @@ services:
     environment:
       # dentro da rede do compose o front acha a API pelo nome do serviço
       TRIAGE_API_URL: http://api:8000
-      TRIAGE_API_MOCK: "false"
       NEXTAUTH_URL: http://localhost:3000
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?defina NEXTAUTH_SECRET no TCC/.env}
       AUTH_DEMO_PASSWORD: ${AUTH_DEMO_PASSWORD:?defina AUTH_DEMO_PASSWORD no TCC/.env}

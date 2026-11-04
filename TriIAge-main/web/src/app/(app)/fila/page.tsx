@@ -1,21 +1,47 @@
 import type { Metadata } from "next";
-import { PlannedModule } from "@/components/planned-module";
+import { Suspense } from "react";
+import { AutoRefresh } from "@/components/auto-refresh";
+import { QueueTable } from "@/components/queue-table";
+import { api } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
 
-export const metadata: Metadata = { title: "Fila" };
+export const metadata: Metadata = { title: "Fila de triagem" };
 
 export default function QueuePage() {
   return (
-    <PlannedModule
-      title="Fila de pacientes"
-      summary="Triagens aguardando atendimento, ordenadas por nível e, no empate, por tempo de espera."
-      items={[
-        "Cor e nome do nível, tempo-alvo, espera, confiança e alertas de cada paciente.",
-        "Destaque para triagens marcadas como “revisão humana necessária”.",
-        "Confirmação do nível ou override com justificativa obrigatória (mín. 10 caracteres).",
-        "Atualização periódica e filtro por nível ou status.",
-      ]}
-      references="RF06, RF07, RF08 · UC07, UC08, UC10 · RNF06, RNF08"
-      blocker="Depende de endpoints na API: listagem de triagens ativas e validação/override com log de auditoria (somente inserção)."
-    />
+    <div className="space-y-8">
+      <AutoRefresh />
+      <div>
+        <h1 className="text-2xl font-semibold">Fila de triagem</h1>
+        <p className="mt-1 text-muted-foreground">
+          Pacientes que já fizeram a pré-avaliação pelo app. Abra o atendimento para medir os sinais vitais e
+          confirmar o nível. A lista atualiza sozinha a cada 30 segundos.
+        </p>
+      </div>
+
+      <section>
+        <h2 className="mb-3 font-semibold">Aguardando triagem</h2>
+        <Suspense fallback={<p className="text-sm text-muted-foreground">Carregando…</p>}>
+          <Queue status="waiting_nurse" empty="Nenhum paciente aguardando triagem." />
+        </Suspense>
+      </section>
+
+      <section id="aguardando-medico" className="scroll-mt-4">
+        <h2 className="font-semibold">Já triados, aguardando o médico</h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Se alguém piorar na espera, use “Nova triagem” para medir de novo. As triagens anteriores ficam guardadas.
+        </p>
+        <Suspense fallback={<p className="text-sm text-muted-foreground">Carregando…</p>}>
+          <Queue status="waiting_doctor" empty="Ninguém aguardando o médico." />
+        </Suspense>
+      </section>
+    </div>
   );
+}
+
+async function Queue({ status, empty }: { status: "waiting_nurse" | "waiting_doctor"; empty: string }) {
+  const [user, encounters] = await Promise.all([requireUser(), api.encounters({ status })]);
+  // retriagem só para quem já foi triado e ainda espera o médico
+  const retriage = status === "waiting_doctor" && user.role === "ENFERMEIRO";
+  return <QueueTable encounters={encounters} hrefBase="/fila" empty={empty} retriage={retriage} />;
 }

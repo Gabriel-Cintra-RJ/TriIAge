@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
+/* Tema claro é o padrão. O escuro entra quando o <html> tem data-theme="dark" (botão no cabeçalho). */
 :root {
-  --background: #f5f7f8;
+  --background: #f3f6f4;
   --surface: #ffffff;
-  --foreground: #14202b;
-  --muted: #e8edf0;
-  --muted-foreground: #556472;
-  --border: #d5dde3;
-  --accent: #0b6e6e;
+  --foreground: #14251c;
+  --muted: #e6eee9;
+  --muted-foreground: #55665c;
+  --border: #d5e0d9;
+  --accent: #127a4a;
   --accent-foreground: #ffffff;
+  --accent-soft: #e2f2e9;
   --danger: #b42318;
   --warning-bg: #fff6db;
   --warning-fg: #7a4b00;
@@ -19,22 +21,25 @@
   --level-3: #f9c80e;
   --level-4: #2e7d32;
   --level-5: #1565c0;
+
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f161c;
-    --surface: #16212a;
-    --foreground: #e6edf2;
-    --muted: #1f2c36;
-    --muted-foreground: #9aabb8;
-    --border: #2a3a46;
-    --accent: #3bb3a9;
-    --accent-foreground: #04201e;
-    --danger: #f97066;
-    --warning-bg: #3a2c05;
-    --warning-fg: #fcd779;
-  }
+:root[data-theme="dark"] {
+  --background: #111714;
+  --surface: #18201c;
+  --foreground: #e3ebe6;
+  --muted: #222c27;
+  --muted-foreground: #9aaba1;
+  --border: #2c3a33;
+  --accent: #36ad72;
+  --accent-foreground: #04170c;
+  --accent-soft: #1d3127;
+  --danger: #f97066;
+  --warning-bg: #3a2c05;
+  --warning-fg: #fcd779;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -46,6 +51,7 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
   --color-warning-bg: var(--warning-bg);
   --color-warning-fg: var(--warning-fg);

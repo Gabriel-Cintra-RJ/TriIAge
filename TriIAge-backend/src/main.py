@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typesafe_sdk import TypeSafeAPIConnectionError, TypeSafeClient, TypeSafeError
 
-from src.api.routes import router
+from src.api import dashboard, encounters, patients, routes, users
 from src.core.config import get_settings
 
 settings = get_settings()
@@ -40,4 +40,8 @@ def jev_error(_: Request, exc: TypeSafeError) -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_502_BAD_GATEWAY, content={"detail": f"Erro no JEV: {exc}"})
 
 
-app.include_router(router)
+app.include_router(routes.router)
+app.include_router(users.router)
+app.include_router(patients.router)
+app.include_router(encounters.router)
+app.include_router(dashboard.router)
