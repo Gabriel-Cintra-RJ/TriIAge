@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from typesafe_sdk import TypeSafeAPIConnectionError, TypeSafeClient, TypeSafeError
+from typesafe_sdk import RetryPolicy, TypeSafeAPIConnectionError, TypeSafeClient, TypeSafeError
 
 from src.api import dashboard, encounters, patients, routes, users
 from src.core.config import get_settings
@@ -15,7 +15,10 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # abrimos o cliente do JEV uma vez só, assim ele reaproveita as conexões em vez de abrir uma por request
-    with TypeSafeClient(api_key=settings.typesafe_api_key.get_secret_value(), model=settings.jev_model) as jev:
+    # o limite de tempo vale para a chamada inteira, contando a nova tentativa
+    retry = RetryPolicy(max_retries=1, timeout=settings.jev_timeout)
+    with TypeSafeClient(api_key=settings.typesafe_api_key.get_secret_value(), model=settings.jev_model,
+                        timeout=settings.jev_timeout, retry=retry) as jev:
         app.state.jev = jev
         yield
 

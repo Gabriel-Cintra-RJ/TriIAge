@@ -90,8 +90,8 @@ CREATE TABLE encounters (
 CREATE INDEX encounters_status_idx ON encounters (status);
 CREATE INDEX encounters_patient_idx ON encounters (patient_id);
 
--- Cada vez que o JEV classifica um atendimento fica uma linha aqui: uma na pré-análise do paciente e
--- uma em cada triagem da enfermagem. Assim dá para comparar todas depois.
+-- Cada classificação do motor híbrido fica uma linha aqui: uma na pré-análise do paciente e uma em cada
+-- triagem da enfermagem. Guarda o que o JEV e a árvore de decisão disseram, para comparar depois.
 CREATE TABLE classifications (
     id                  bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     encounter_id        bigint           NOT NULL REFERENCES encounters (id),
@@ -105,7 +105,14 @@ CREATE TABLE classifications (
     confidence          double precision,
     probabilities       jsonb,
     needs_human_review  boolean          NOT NULL,
-    model               varchar(50)
+    model               varchar(50),
+    -- hybrid = JEV + árvore; rules = o JEV falhou e valeu só a árvore (contingência, RNF05)
+    origin              varchar(10)      NOT NULL DEFAULT 'hybrid' CHECK (origin IN ('hybrid', 'rules')),
+    model_level         varchar(30),
+    rules_level         varchar(30),
+    divergent           boolean          NOT NULL DEFAULT false,
+    decision_path       jsonb,           -- caminho percorrido na árvore
+    duration_ms         integer          -- tempo da classificação (RNF03)
 );
 
 -- Sinais vitais medidos no hospital (encounter_id preenchido) ou anotados pelo paciente em casa.

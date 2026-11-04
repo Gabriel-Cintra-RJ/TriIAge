@@ -18,6 +18,8 @@ class Settings(BaseSettings):
 
     typesafe_api_key: SecretStr
     jev_model: str = "jev-latest"
+    # passou disso sem resposta, a classificação sai pela árvore de decisão (RNF05)
+    jev_timeout: float = 10.0
     # se o JEV responder com confiança menor que isso, marcamos para um profissional revisar
     min_confidence: float = 0.7
 

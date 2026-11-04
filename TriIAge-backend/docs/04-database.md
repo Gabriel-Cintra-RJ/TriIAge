@@ -6,12 +6,12 @@ A estrutura está em `database/init/01_schema.sql` e os dados de exemplo em `dat
 
 | Tabela | De onde vem | O que guarda |
 |---|---|---|
-| `symptom_urgency` | `database/csv/symptom_urgency.csv` | situações clínicas e o nível de urgência de cada uma (73 linhas, 26 queixas) |
+| `symptom_urgency` | `database/csv/symptom_urgency.csv` | situações clínicas e o nível de urgência de cada uma (81 linhas, 26 queixas; 8 são faixas complementares do projeto, de nível 4 e 5, com `source` começando por "Critério do projeto TriIAge" e pendentes de validação clínica) |
 | `medications` | `database/csv/medications.csv` | medicamentos e as indicações previstas em bula (90) |
 | `users` | API / dados de exemplo | pacientes e equipe; o campo `role` diz o perfil |
 | `patients` | API / dados de exemplo | dados do paciente: nascimento, sexo, tipo sanguíneo |
 | `encounters` | API | o atendimento: relato do paciente, nível atual (o da última triagem), médico e status |
-| `classifications` | API | cada resposta do JEV: uma na pré-análise do paciente e uma em cada triagem |
+| `classifications` | API | cada classificação do motor híbrido (pré-análise e cada triagem): nível final, níveis do JEV e da árvore, divergência, origem (`hybrid` ou `rules`), caminho da árvore e tempo |
 | `triages` | API | cada triagem da enfermagem (a primeira e as retriagens): sinais vitais, classificação, nível que valeu, justificativa |
 | `vital_signs` | API | medições da enfermagem (com `encounter_id`) ou feitas pelo paciente em casa |
 | `prescriptions` / `prescription_items` | API | diagnóstico e receita; cada remédio aponta para a bula quando a gente acha |

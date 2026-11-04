@@ -61,6 +61,8 @@ def dashboard(db: Db, user_id: int | None = None):
         func.count().filter(Classification.escalated.is_(True)),
         func.count().filter(Classification.needs_human_review.is_(True)),
         func.avg(Classification.confidence),
+        func.count().filter(Classification.origin == "rules"),
+        func.count().filter(Classification.divergent.is_(True)),
     )).one()
     overrides = db.scalar(select(func.count()).select_from(Triage).where(Triage.override_reason.is_not(None)))
 
@@ -81,5 +83,6 @@ def dashboard(db: Db, user_id: int | None = None):
         model=ModelStats(
             classifications=stats[0], unmatched=stats[1], escalated=stats[2], needs_review=stats[3],
             avg_confidence=round(float(stats[4]), 3) if stats[4] is not None else None, overrides=overrides,
+            rules_fallback=stats[5], divergent=stats[6],
         ),
     )

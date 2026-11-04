@@ -1,11 +1,12 @@
 """Atendimento: paciente descreve os sintomas -> enfermagem completa com sinais vitais -> médico fecha com a receita."""
 
+import time
 from datetime import UTC, date, datetime
 
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from typesafe_sdk import TypeSafeClient
+from typesafe_sdk import TypeSafeClient, TypeSafeError
 
 from src.api.converters import encounter_detail, encounter_summary
 from src.api.deps import Config, Db, Jev
@@ -35,7 +36,8 @@ from src.schemas import (
 )
 from src.services import medications as med_service
 from src.services.encounters import LEVEL_PRIORITY, end_date, pick_presentation, triage_request
-from src.services.triage import UrgencyResult, classify_urgency, retrieve_candidates
+from src.services.hybrid import classify_hybrid
+from src.services.triage import UrgencyResult
 
 router = APIRouter(prefix="/encounters", tags=["atendimento"])
 
@@ -65,7 +67,8 @@ def classify(db: Session, jev: TypeSafeClient, settings: Settings, request: Tria
     records = db.scalars(select(SymptomUrgency)).all()
     if not records:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "Base de sintomas vazia.")
-    result = classify_urgency(jev, request, retrieve_candidates(request, records), settings.min_confidence)
+    start = time.perf_counter()
+    result = classify_hybrid(jev, request, records, settings.min_confidence)
     classification = Classification(
         stage=stage,
         input=request.model_dump(mode="json", exclude_none=True),
@@ -77,6 +80,12 @@ def classify(db: Session, jev: TypeSafeClient, settings: Settings, request: Tria
         probabilities=result.probabilities,
         needs_human_review=result.needs_human_review,
         model=result.model,
+        origin=result.origin,
+        model_level=result.model_level,
+        rules_level=result.rules_level,
+        divergent=result.divergent,
+        decision_path=list(result.path),
+        duration_ms=round((time.perf_counter() - start) * 1000),
     )
     return classification, result
 
@@ -181,7 +190,11 @@ def complete_consultation(encounter_id: int, payload: PrescriptionIn, db: Db, je
     )
     ends = []
     for item in payload.items:
-        found = med_service.lookup(jev, item.name, base, settings.min_confidence)
+        try:
+            found = med_service.lookup(jev, item.name, base, settings.min_confidence)
+        except TypeSafeError:
+            # sem o JEV a receita não pode travar: o remédio só fica sem o detalhe da bula
+            found = med_service.LookupResult(item.name, [], "none")
         med = pick_presentation(item.name, found.medications) if found.medications else None
         line = PrescriptionItem(
             written_name=item.name.strip(), medication=med, match_method=found.method, dosage=item.dosage,

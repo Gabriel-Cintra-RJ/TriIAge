@@ -127,6 +127,12 @@ class Classification(Base):
     probabilities: Mapped[dict[str, float] | None] = mapped_column(JSONB)
     needs_human_review: Mapped[bool]
     model: Mapped[str | None] = mapped_column(String(50))
+    origin: Mapped[str] = mapped_column(String(10), default="hybrid")
+    model_level: Mapped[str | None] = mapped_column(String(30))
+    rules_level: Mapped[str | None] = mapped_column(String(30))
+    divergent: Mapped[bool] = mapped_column(default=False)
+    decision_path: Mapped[list[str] | None] = mapped_column(JSONB)
+    duration_ms: Mapped[int | None]
 
     record: Mapped[SymptomUrgency | None] = relationship(lazy="joined")
 

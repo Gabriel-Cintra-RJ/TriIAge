@@ -1,0 +1,4 @@
+id,particao,relato,idade,sexo,gestante,condicoes,avaliador1,avaliador2,referencia
+C001,desenvolvimento,"aperto forte no peito que desce pro braço esquerdo, suando frio",58,M,não,hipertensão,,,
+C002,teste,"torci o tornozelo jogando bola, está inchado mas consigo pisar",24,M,não,,,,
+C003,teste,"febre há dois dias e dor de garganta",31,F,não,,,,

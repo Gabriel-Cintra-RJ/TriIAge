@@ -1,0 +1,903 @@
+{
+  "n_casos": 100,
+  "semente": 42,
+  "bootstrap": 2000,
+  "distribuicao_referencia": {
+    "Vermelho": 20,
+    "Laranja": 22,
+    "Amarelo": 25,
+    "Verde": 20,
+    "Azul": 13
+  },
+  "configuracoes": {
+    "A - árvore de decisão": {
+      "n": 87,
+      "kappa_ponderado_quadratico": {
+        "valor": 0.4869132914168738,
+        "ic95_bootstrap": [
+          0.3236970053614689,
+          0.64280910246717
+        ]
+      },
+      "acuracia_exata": {
+        "x": 48,
+        "n": 87,
+        "valor": 0.5517241379310345,
+        "ic95": [
+          0.447243599475858,
+          0.6518299527292991
+        ]
+      },
+      "acuracia_mais_menos_1": {
+        "x": 68,
+        "n": 87,
+        "valor": 0.7816091954022989,
+        "ic95": [
+          0.6839074696002304,
+          0.8554929812945139
+        ]
+      },
+      "subtriagem_geral": {
+        "x": 12,
+        "n": 87,
+        "valor": 0.13793103448275862,
+        "ic95": [
+          0.08069698827736069,
+          0.22578814628653956
+        ]
+      },
+      "subtriagem_niveis_1_e_2": {
+        "x": 11,
+        "n": 39,
+        "valor": 0.28205128205128205,
+        "ic95": [
+          0.16543325013943294,
+          0.43775617322477384
+        ]
+      },
+      "sobretriagem_geral": {
+        "x": 27,
+        "n": 87,
+        "valor": 0.3103448275862069,
+        "ic95": [
+          0.22289014167438978,
+          0.4138401669067009
+        ]
+      },
+      "urgente_sensibilidade": {
+        "x": 30,
+        "n": 39,
+        "valor": 0.7692307692307693,
+        "ic95": [
+          0.6166343954261704,
+          0.8735433757121625
+        ]
+      },
+      "urgente_especificidade": {
+        "x": 39,
+        "n": 48,
+        "valor": 0.8125,
+        "ic95": [
+          0.6805986065115378,
+          0.8980872365179983
+        ]
+      },
+      "por_nivel": {
+        "Vermelho": {
+          "sensibilidade": {
+            "x": 12,
+            "n": 18,
+            "valor": 0.6666666666666666,
+            "ic95": [
+              0.4374906934425036,
+              0.8372144563633714
+            ]
+          },
+          "especificidade": {
+            "x": 62,
+            "n": 69,
+            "valor": 0.8985507246376812,
+            "ic95": [
+              0.8050790434713212,
+              0.9499839974283845
+            ]
+          }
+        },
+        "Laranja": {
+          "sensibilidade": {
+            "x": 14,
+            "n": 21,
+            "valor": 0.6666666666666666,
+            "ic95": [
+              0.45373075657210293,
+              0.8280546356731631
+            ]
+          },
+          "especificidade": {
+            "x": 60,
+            "n": 66,
+            "valor": 0.9090909090909091,
+            "ic95": [
+              0.8155105617491718,
+              0.9576676014086023
+            ]
+          }
+        },
+        "Amarelo": {
+          "sensibilidade": {
+            "x": 18,
+            "n": 24,
+            "valor": 0.75,
+            "ic95": [
+              0.5510017468789357,
+              0.8800079652065766
+            ]
+          },
+          "especificidade": {
+            "x": 43,
+            "n": 63,
+            "valor": 0.6825396825396826,
+            "ic95": [
+              0.559962360918752,
+              0.7841347283190879
+            ]
+          }
+        },
+        "Verde": {
+          "sensibilidade": {
+            "x": 4,
+            "n": 12,
+            "valor": 0.3333333333333333,
+            "ic95": [
+              0.13811783989736134,
+              0.609382412602386
+            ]
+          },
+          "especificidade": {
+            "x": 69,
+            "n": 75,
+            "valor": 0.92,
+            "ic95": [
+              0.8362501593344202,
+              0.9628203821056319
+            ]
+          }
+        },
+        "Azul": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 12,
+            "valor": 0.0,
+            "ic95": [
+              0.0,
+              0.2425007574992425
+            ]
+          },
+          "especificidade": {
+            "x": 75,
+            "n": 75,
+            "valor": 1.0,
+            "ic95": [
+              0.9512744540953,
+              1.0
+            ]
+          }
+        }
+      },
+      "matriz_confusao_linhas_referencia_colunas_sugestao": [
+        [
+          12,
+          2,
+          3,
+          1,
+          0
+        ],
+        [
+          2,
+          14,
+          4,
+          1,
+          0
+        ],
+        [
+          4,
+          1,
+          18,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          7,
+          4,
+          0
+        ],
+        [
+          0,
+          3,
+          6,
+          3,
+          0
+        ]
+      ],
+      "cobertura": {
+        "x": 87,
+        "n": 100,
+        "valor": 0.87,
+        "ic95": [
+          0.7901947810519012,
+          0.9224290614158575
+        ]
+      },
+      "tempo_ms": {
+        "mediana": 5.0,
+        "p95": 10.0
+      }
+    },
+    "B - modelo (JEV)": {
+      "n": 0,
+      "kappa_ponderado_quadratico": {
+        "valor": NaN,
+        "ic95_bootstrap": [
+          NaN,
+          NaN
+        ]
+      },
+      "acuracia_exata": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "acuracia_mais_menos_1": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "subtriagem_geral": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "subtriagem_niveis_1_e_2": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "sobretriagem_geral": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "urgente_sensibilidade": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "urgente_especificidade": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "por_nivel": {
+        "Vermelho": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Laranja": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Amarelo": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Verde": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Azul": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        }
+      },
+      "matriz_confusao_linhas_referencia_colunas_sugestao": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "cobertura": {
+        "x": 0,
+        "n": 100,
+        "valor": 0.0,
+        "ic95": [
+          0.0,
+          0.03699480747600191
+        ]
+      }
+    },
+    "C - motor híbrido": {
+      "n": 0,
+      "kappa_ponderado_quadratico": {
+        "valor": NaN,
+        "ic95_bootstrap": [
+          NaN,
+          NaN
+        ]
+      },
+      "acuracia_exata": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "acuracia_mais_menos_1": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "subtriagem_geral": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "subtriagem_niveis_1_e_2": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "sobretriagem_geral": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "urgente_sensibilidade": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "urgente_especificidade": {
+        "x": 0,
+        "n": 0,
+        "valor": NaN,
+        "ic95": [
+          NaN,
+          NaN
+        ]
+      },
+      "por_nivel": {
+        "Vermelho": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Laranja": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Amarelo": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Verde": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        },
+        "Azul": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 0,
+            "valor": NaN,
+            "ic95": [
+              NaN,
+              NaN
+            ]
+          }
+        }
+      },
+      "matriz_confusao_linhas_referencia_colunas_sugestao": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "cobertura": {
+        "x": 0,
+        "n": 100,
+        "valor": 0.0,
+        "ic95": [
+          0.0,
+          0.03699480747600191
+        ]
+      }
+    },
+    "D - linha de base": {
+      "n": 100,
+      "kappa_ponderado_quadratico": {
+        "valor": 0.0,
+        "ic95_bootstrap": [
+          0.0,
+          0.0
+        ]
+      },
+      "acuracia_exata": {
+        "x": 25,
+        "n": 100,
+        "valor": 0.25,
+        "ic95": [
+          0.1754509400372426,
+          0.3430464637007583
+        ]
+      },
+      "acuracia_mais_menos_1": {
+        "x": 67,
+        "n": 100,
+        "valor": 0.67,
+        "ic95": [
+          0.5730516033971139,
+          0.7543701620610456
+        ]
+      },
+      "subtriagem_geral": {
+        "x": 42,
+        "n": 100,
+        "valor": 0.42,
+        "ic95": [
+          0.327982249185113,
+          0.5179369200110473
+        ]
+      },
+      "subtriagem_niveis_1_e_2": {
+        "x": 42,
+        "n": 42,
+        "valor": 1.0,
+        "ic95": [
+          0.9161983874908382,
+          1.0
+        ]
+      },
+      "sobretriagem_geral": {
+        "x": 33,
+        "n": 100,
+        "valor": 0.33,
+        "ic95": [
+          0.24562983793895452,
+          0.4269483966028862
+        ]
+      },
+      "urgente_sensibilidade": {
+        "x": 0,
+        "n": 42,
+        "valor": 0.0,
+        "ic95": [
+          0.0,
+          0.08380161250916197
+        ]
+      },
+      "urgente_especificidade": {
+        "x": 58,
+        "n": 58,
+        "valor": 1.0,
+        "ic95": [
+          0.9378800031047062,
+          0.9999999999999999
+        ]
+      },
+      "por_nivel": {
+        "Vermelho": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 20,
+            "valor": 0.0,
+            "ic95": [
+              0.0,
+              0.16113012549493322
+            ]
+          },
+          "especificidade": {
+            "x": 80,
+            "n": 80,
+            "valor": 1.0,
+            "ic95": [
+              0.954180263735425,
+              1.0
+            ]
+          }
+        },
+        "Laranja": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 22,
+            "valor": 0.0,
+            "ic95": [
+              1.3877787807814457e-17,
+              0.14865952572596125
+            ]
+          },
+          "especificidade": {
+            "x": 78,
+            "n": 78,
+            "valor": 1.0,
+            "ic95": [
+              0.9530605462258804,
+              1.0
+            ]
+          }
+        },
+        "Amarelo": {
+          "sensibilidade": {
+            "x": 25,
+            "n": 25,
+            "valor": 1.0,
+            "ic95": [
+              0.8668035060468213,
+              1.0
+            ]
+          },
+          "especificidade": {
+            "x": 0,
+            "n": 75,
+            "valor": 0.0,
+            "ic95": [
+              0.0,
+              0.04872554590470005
+            ]
+          }
+        },
+        "Verde": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 20,
+            "valor": 0.0,
+            "ic95": [
+              0.0,
+              0.16113012549493322
+            ]
+          },
+          "especificidade": {
+            "x": 80,
+            "n": 80,
+            "valor": 1.0,
+            "ic95": [
+              0.954180263735425,
+              1.0
+            ]
+          }
+        },
+        "Azul": {
+          "sensibilidade": {
+            "x": 0,
+            "n": 13,
+            "valor": 0.0,
+            "ic95": [
+              0.0,
+              0.22810184305529166
+            ]
+          },
+          "especificidade": {
+            "x": 87,
+            "n": 87,
+            "valor": 1.0,
+            "ic95": [
+              0.957711004649852,
+              1.0
+            ]
+          }
+        }
+      },
+      "matriz_confusao_linhas_referencia_colunas_sugestao": [
+        [
+          0,
+          0,
+          20,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          22,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          20,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          13,
+          0,
+          0
+        ]
+      ],
+      "cobertura": {
+        "x": 100,
+        "n": 100,
+        "valor": 1.0,
+        "ic95": [
+          0.9630051925239981,
+          0.9999999999999999
+        ]
+      }
+    }
+  },
+  "aviso_linha_de_base": "D_base calculada como o nível mais frequente da referência (Amarelo)."
+}

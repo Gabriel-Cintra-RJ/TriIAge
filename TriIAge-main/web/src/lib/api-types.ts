@@ -177,6 +177,14 @@ export type Classification = {
   needs_human_review: boolean;
   matched_record: MatchedRecord | null;
   model: string | null;
+  /** hybrid = JEV + árvore de decisão; rules = o JEV falhou e valeu só a árvore (contingência) */
+  origin: "hybrid" | "rules";
+  /** a árvore e o JEV deram níveis diferentes; prevaleceu o mais urgente */
+  divergent: boolean;
+  model_level: UrgencyLevel | null;
+  rules_level: UrgencyLevel | null;
+  decision_path: string[];
+  duration_ms: number | null;
 };
 
 export type Medication = {
@@ -276,6 +284,8 @@ export type Dashboard = {
     needs_review: number;
     avg_confidence: number | null;
     overrides: number;
+    rules_fallback: number;
+    divergent: number;
   };
 };
 

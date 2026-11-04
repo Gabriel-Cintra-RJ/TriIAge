@@ -33,6 +33,11 @@ export const LEVEL_BY_PRIORITY = {
   5: "guided_self_care",
 } as const;
 
+export function priorityOf(level: string | null) {
+  const entry = Object.entries(LEVEL_BY_PRIORITY).find(([, value]) => value === level);
+  return entry ? Number(entry[0]) : null;
+}
+
 export function levelStyle(priority: number): LevelStyle {
   return LEVELS[priority] ?? { color: "—", label: "Sem nível", badge: "bg-muted text-foreground" };
 }

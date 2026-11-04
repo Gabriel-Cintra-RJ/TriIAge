@@ -22,9 +22,9 @@ tem como dizer que não sabe, em vez de forçar uma resposta.
 
 ## Pré-consulta (`src/services/triage.py`)
 
-Mandar as 73 situações de uma vez para o JEV ficaria confuso, então antes a API faz uma busca simples. Ela
+Mandar as 81 situações de uma vez para o JEV ficaria confuso, então antes a API faz uma busca simples. Ela
 normaliza o texto (minúsculas, sem acento) e compara os radicais das palavras do relato com os da base. As
-três queixas que mais batem entram, cada uma com todas as suas faixas de gravidade:
+cinco queixas que mais batem entram, cada uma com todas as suas faixas de gravidade:
 
 ```python
 candidates = retrieve_candidates(payload, records)   # ex.: as faixas de "Dor no peito" e "Falta de ar"
@@ -46,6 +46,34 @@ Com a resposta, aplicamos duas regras de segurança:
 
 Se a busca não achar nada parecido, ou o JEV escolher `none`, a resposta vem com `matched: false` e a
 orientação de procurar um profissional. Nesse caso nem chamamos o JEV quando a busca vem vazia.
+
+## Motor híbrido e árvore de decisão (`src/services/hybrid.py` e `decision_tree.py`)
+
+O JEV não decide sozinho. Junto com ele roda uma **árvore de decisão**, no formato dos fluxogramas do CAB 28 de
+onde a base veio:
+
+1. acha a queixa principal (a mesma busca por palavras);
+2. desce pelas faixas da queixa, da mais grave para a mais leve, e para na primeira que tem algum
+   **discriminador** no relato. Discriminador é uma palavra da descrição da faixa. Se a mesma palavra aparece
+   em mais de um nível, ela fica com o mais leve: "febre" fica na dor de garganta urgente e a muito urgente
+   precisa de "febre **alta**". Palavras genéricas (pele, boca, rosto, baixa, fria...) só contam junto com a
+   parceira da mesma frase ("pele fria" conta, "pele" sozinha não). O que vem depois de "sem", "não", "nem"
+   é ignorado;
+3. se nenhuma faixa tiver discriminador, fica a mais leve **do fluxograma do CAB 28**. As faixas complementares
+   do projeto (níveis 4 e 5, ex.: resfriado sem febre) só são escolhidas quando o relato traz o discriminador;
+4. na triagem, o que o relato diz e a medição desmente não conta: "febre alta" com temperatura abaixo de
+   37,8 °C, "pressão 19 por 12" com PA normal, "glicose alta" com glicemia normal, "coração acelerado" com FC
+   normal. O caminho registra o que foi desconsiderado;
+5. sinais vitais muito alterados garantem um nível mínimo: SpO₂ < 90 ou PA sistólica < 90 → emergência; FC, FR,
+   temperatura, glicemia ou PA fora das faixas de alerta → no mínimo muito urgente.
+
+O motor híbrido (UC06 do documento) junta os dois: se a árvore e o JEV derem níveis diferentes, **prevalece o
+mais urgente** e a classificação fica com `divergent: true`. O caminho da árvore vai em `decision_path`.
+
+**Contingência (RNF05):** se o JEV não responder em `JEV_TIMEOUT` segundos (10 por padrão, contando a nova
+tentativa) ou der qualquer erro, a classificação sai só da árvore, com `origin: "rules"` e revisão humana. A
+triagem nunca fica travada por causa do modelo. Na receita, se o JEV cair, o remédio só fica sem o detalhe da
+bula.
 
 ## Pós-consulta (`src/services/medications.py`)
 

@@ -1,13 +1,19 @@
-import type { Classification } from "@/lib/api-types";
+import type { Classification, UrgencyLevel } from "@/lib/api-types";
 import { formatDateTime } from "@/lib/format";
+import { levelStyle, priorityOf } from "@/lib/levels";
 import { LevelBadge } from "./level-badge";
+
+function levelName(level: UrgencyLevel | null) {
+  const priority = priorityOf(level);
+  return priority ? levelStyle(priority).label : "nenhum";
+}
 
 const STAGE_LABELS = {
   patient: "Pré-análise (relato do paciente)",
   nursing: "Classificação com sinais vitais",
 };
 
-// Versão para a equipe: mostra confiança, escalonamento e a situação da base que o JEV escolheu.
+// Versão para a equipe: confiança, origem (híbrido ou só regras), divergência árvore × JEV e a situação da base.
 export function ClassificationCard({ classification: c }: { classification: Classification }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-4">
@@ -27,16 +33,40 @@ export function ClassificationCard({ classification: c }: { classification: Clas
         <span className="text-sm text-muted-foreground">
           Confiança {c.confidence === null ? "—" : `${Math.round(c.confidence * 100)}%`}
           {c.model && ` · ${c.model}`}
+          {c.duration_ms !== null && ` · ${c.duration_ms} ms`}
         </span>
       </div>
+
+      {c.origin === "rules" ? (
+        <p className="mt-3 rounded-md bg-warning-bg px-3 py-2 text-sm text-warning-fg">
+          Origem: regras. O JEV não respondeu, então o nível veio só da árvore de decisão e precisa de revisão humana.
+        </p>
+      ) : (
+        c.divergent && (
+          <p className="mt-3 text-sm text-warning-fg">
+            Árvore de decisão: {levelName(c.rules_level)} · JEV: {levelName(c.model_level)}. Prevaleceu o mais urgente.
+          </p>
+        )
+      )}
 
       {c.escalated && (
         <p className="mt-3 text-sm text-warning-fg">
           Nível elevado: uma situação mais grave também era plausível.
         </p>
       )}
-      {c.needs_human_review && (
+      {c.needs_human_review && c.origin === "hybrid" && (
         <p className="mt-2 text-sm font-medium text-warning-fg">Confiança baixa: precisa de revisão humana.</p>
+      )}
+
+      {c.decision_path.length > 0 && (
+        <details className="mt-3 text-sm">
+          <summary className="cursor-pointer text-muted-foreground">Caminho na árvore de decisão</summary>
+          <ol className="mt-2 list-decimal space-y-1 pl-5">
+            {c.decision_path.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </details>
       )}
 
       {c.matched_record && (

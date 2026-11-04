@@ -34,9 +34,15 @@ class UrgencyResult:
     probabilities: dict[str, float] | None = None
     needs_human_review: bool = True
     model: str | None = None
+    # usados pelo motor híbrido (services/hybrid.py)
+    origin: str = "model"           # "model", "hybrid" ou "rules" (contingência)
+    divergent: bool = False         # árvore e modelo deram níveis diferentes
+    model_level: str | None = None
+    rules_level: str | None = None
+    path: tuple[str, ...] = ()      # caminho percorrido na árvore
 
 
-def _query_text(payload: TriageRequest) -> str:
+def query_text(payload: TriageRequest) -> str:
     return " ".join([payload.description, *payload.symptoms, *payload.conditions])
 
 
@@ -49,9 +55,9 @@ def _score(record: SymptomUrgency, query: set[str], pregnant: bool) -> int:
     return score
 
 
-def retrieve_candidates(payload: TriageRequest, records: Sequence[SymptomUrgency]) -> list[SymptomUrgency]:
-    """Devolve todas as faixas de gravidade das queixas que mais parecem com o relato (ou [] se nada bater)."""
-    query = stems(_query_text(payload))
+def rank_complaints(payload: TriageRequest, records: Sequence[SymptomUrgency]) -> list[tuple[int, list[SymptomUrgency]]]:
+    """Queixas parecidas com o relato, da mais parecida para a menos, cada uma com todas as suas faixas."""
+    query = stems(query_text(payload))
     if not payload.pregnant:  # as situações "... na gestação" só fazem sentido para gestante
         records = [r for r in records if not r.main_symptom.endswith("na gestação")]
     by_group = sorted(records, key=lambda r: r.main_symptom)
@@ -62,6 +68,12 @@ def retrieve_candidates(payload: TriageRequest, records: Sequence[SymptomUrgency
         if best >= MIN_SCORE:
             ranked.append((best, rows))
     ranked.sort(key=lambda item: item[0], reverse=True)
+    return ranked
+
+
+def retrieve_candidates(payload: TriageRequest, records: Sequence[SymptomUrgency]) -> list[SymptomUrgency]:
+    """Devolve todas as faixas de gravidade das queixas que mais parecem com o relato (ou [] se nada bater)."""
+    ranked = rank_complaints(payload, records)
     return [row for _, rows in ranked[:MAX_GROUPS] for row in sorted(rows, key=lambda r: r.priority)]
 
 
@@ -81,6 +93,7 @@ def classify_urgency(
     payload: TriageRequest,
     candidates: Sequence[SymptomUrgency],
     min_confidence: float,
+    escalate: bool = True,
 ) -> UrgencyResult:
     if not candidates:
         return UrgencyResult(matched=False)
@@ -99,7 +112,8 @@ def classify_urgency(
 
     chosen = next(r for r in candidates if r.id == answer.choice)
     # na dúvida ficamos com o mais grave: se outra opção mais séria também for plausível, ela ganha
-    plausible = [r for r in candidates if probabilities.get(r.id, 0.0) >= ESCALATION_PROB]
+    # (o piloto desliga isso para medir o modelo sozinho)
+    plausible = [r for r in candidates if escalate and probabilities.get(r.id, 0.0) >= ESCALATION_PROB]
     final = min([chosen, *plausible], key=lambda r: r.priority)
     return UrgencyResult(
         matched=True,

@@ -27,7 +27,12 @@ export async function ManagementDashboard({ user }: { user: CurrentUser }) {
 
       <StatGrid>
         <StatTile label="Atendimentos hoje" value={stats.created_today} hint={`Finalizados: ${stats.completed_today}`} />
-        <StatTile label="Classificações do JEV" value={m.classifications} hint="Pré-análises e triagens" />
+        <StatTile
+          label="Classificações"
+          value={m.classifications}
+          hint={`Pela contingência (só regras): ${m.rules_fallback}`}
+          alert={m.rules_fallback > 0 ? `${m.rules_fallback} sem o JEV` : undefined}
+        />
         <StatTile
           label="Confiança média"
           value={m.avg_confidence === null ? "—" : `${Math.round(m.avg_confidence * 100)}%`}
@@ -41,7 +46,11 @@ export async function ManagementDashboard({ user }: { user: CurrentUser }) {
         <StatTile label="Precisaram de revisão" value={percent(m.needs_review, m.classifications)} hint={`${m.needs_review} classificações com confiança baixa`} />
         <StatTile label="Nível elevado por segurança" value={percent(m.escalated, m.classifications)} hint={`${m.escalated} vezes uma opção mais grave ganhou`} />
         <StatTile label="Sem correspondência na base" value={percent(m.unmatched, m.classifications)} hint={`${m.unmatched} relatos que a base não cobre`} />
-        <StatTile label="Retriagens hoje" value={stats.retriages_today} hint={`${stats.triages_today} triagens no total`} />
+        <StatTile
+          label="Árvore × JEV divergiram"
+          value={percent(m.divergent, m.classifications)}
+          hint={`${m.divergent} vezes; prevaleceu o mais urgente`}
+        />
       </StatGrid>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">

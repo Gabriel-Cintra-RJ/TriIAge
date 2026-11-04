@@ -66,6 +66,12 @@ class ClassificationOut(BaseModel):
     needs_human_review: bool
     matched_record: MatchedRecord | None
     model: str | None
+    origin: Literal["hybrid", "rules"] = Field(description="rules = o JEV falhou e valeu só a árvore de decisão")
+    divergent: bool = Field(description="A árvore e o JEV deram níveis diferentes (prevaleceu o mais urgente)")
+    model_level: UrgencyLevel | None
+    rules_level: UrgencyLevel | None
+    decision_path: list[str]
+    duration_ms: int | None
 
 
 # ---------- usuários e pacientes ----------
@@ -299,6 +305,8 @@ class ModelStats(BaseModel):
     needs_review: int
     avg_confidence: float | None
     overrides: int = Field(description="Triagens em que a enfermagem mudou o nível do sistema")
+    rules_fallback: int = Field(description="Classificações feitas só pela árvore porque o JEV falhou")
+    divergent: int = Field(description="Classificações em que a árvore e o JEV discordaram")
 
 
 class DashboardOut(BaseModel):

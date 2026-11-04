@@ -29,7 +29,7 @@ JEV). O resto pode ficar como está. O `.env` está no `.gitignore` e não deve 
 docker compose up --build
 ```
 
-Nos logs do banco devem aparecer duas cargas, `COPY 90` (medications) e `COPY 73` (symptom_urgency), e depois
+Nos logs do banco devem aparecer duas cargas, `COPY 90` (medications) e `COPY 81` (symptom_urgency), e depois
 `Uvicorn running on http://0.0.0.0:8000`. Deixe esse terminal aberto e abra outro.
 
 ## 4. Conferir o banco

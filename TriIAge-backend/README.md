@@ -72,10 +72,12 @@ uv run pytest
 ### O atendimento
 
 1. **Paciente** (`POST /encounters`): manda o relato, os sintomas, desde quando e a dor (0 a 10). A API junta
-   com o histórico dele (idade, sexo, doenças, alergias, remédios em uso), busca na base as queixas parecidas
-   e manda todas as faixas de gravidade dessas queixas ao JEV, que escolhe a que corresponde (ou `none`). Se
-   uma faixa mais grave também for plausível (probabilidade ≥ 20%), ela prevalece (`escalated: true`).
-   Confiança abaixo de `MIN_CONFIDENCE` marca `needs_human_review: true`. Status: `waiting_nurse`.
+   com o histórico dele (idade, sexo, doenças, alergias, remédios em uso) e classifica pelo **motor híbrido**:
+   o JEV escolhe entre as faixas das queixas parecidas (se uma faixa mais grave também for plausível, com
+   probabilidade ≥ 20%, ela prevalece) e a **árvore de decisão** também classifica; se divergirem, fica o mais
+   urgente (`divergent: true`). Confiança abaixo de `MIN_CONFIDENCE` marca `needs_human_review: true`. Se o
+   JEV falhar ou passar de `JEV_TIMEOUT`, vale só a árvore (`origin: "rules"`). Status: `waiting_nurse`.
+   Detalhes em [docs/05-jev.md](docs/05-jev.md).
 2. **Enfermagem** (`POST /encounters/{id}/nursing`): manda os sinais vitais (pressão, FC, FR, temperatura,
    SpO₂, glicemia), a dor avaliada e observações. O JEV classifica de novo com esses dados. A enfermagem pode
    escolher outro nível, mas aí a justificativa (mínimo 10 caracteres) é obrigatória. Status: `waiting_doctor`.

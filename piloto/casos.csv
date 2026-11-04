@@ -1,0 +1,101 @@
+id,particao,relato,idade,sexo,gestante,condicoes,avaliador1,avaliador2,referencia,queixa_categoria,na_base,justificativa_referencia
+C001,teste,"Tô com um aperto no peito que vai pro braço esquerdo, começou faz meia hora e tô suando frio",62,M,não,hipertensão; diabetes,,,1,Dor no peito,sim,Dor torácica típica com sudorese: suspeita de síndrome coronariana.
+C002,teste,"Não consigo respirar direito, não dá nem pra falar uma frase inteira e minha boca tá ficando roxa",70,F,não,DPOC,,,1,Falta de ar,sim,Desconforto respiratório grave com cianose.
+C003,teste,Meu irmão está se debatendo no chão faz uns seis minutos e não volta,34,M,não,epilepsia,,,1,Crise convulsiva,sim,Convulsão prolongada (estado de mal epiléptico).
+C004,teste,"Comi um doce com amendoim e minha língua e a boca estão inchando, tá difícil respirar",22,F,não,,,,1,Reação alérgica,sim,Anafilaxia com acometimento de via aérea.
+C005,desenvolvimento,"Sou diabético, tô vomitando sem parar, respirando muito rápido, com um bafo de fruta e muito sonolento",19,M,não,diabetes tipo 1,,,1,Alteração da glicose,sim,Sinais de cetoacidose com alteração de consciência.
+C006,desenvolvimento,"Estou grávida de 32 semanas e começou a sair muito sangue, com uma dor forte na barriga",30,F,sim,,,,1,Sangramento na gestação,sim,Hemorragia volumosa na gestação com dor.
+C007,desenvolvimento,"Do nada me deu a pior dor de cabeça da minha vida, vomitei e estou meio confusa",55,F,não,hipertensão,,,1,Dor de cabeça,sim,Cefaleia súbita intensa com alteração de consciência.
+C008,teste,"Meu filho virou a panela de água fervendo no peito e nos braços, a pele está soltando",6,M,não,,,,1,Queimadura,sim,Queimadura extensa em criança.
+C009,teste,Minha filha tomou uma cartela inteira de remédio de propósito e está muito sonolenta,17,F,não,depressão,,,1,Intoxicação,sim,Intoxicação intencional com rebaixamento de consciência.
+C010,desenvolvimento,"Não aguento mais, quero me matar hoje e tenho uma arma em casa",28,M,não,,,,1,Sofrimento mental,sim,Ideação suicida com plano e meio disponível.
+C011,desenvolvimento,"Tive febre por uns dias, agora a barriga dói muito, vomitei sangue e fico tonta quando levanto, a pele tá fria",40,F,não,,,,1,Suspeita de dengue,sim,Dengue com sinais de choque e sangramento.
+C012,teste,"Minha avó teve diarreia o dia todo, desmaiou agora e está fria e pálida",80,F,não,,,,1,Diarreia e vômito,sim,Desidratação grave com sinais de choque em idosa.
+C013,desenvolvimento,"Medi a pressão e deu 22 por 13, estou com dor no peito e falta de ar",60,M,não,hipertensão,,,1,Pressão alta,sim,Crise hipertensiva com dor torácica e dispneia.
+C014,desenvolvimento,Minha filha de 2 anos está fazendo um barulho alto pra respirar e ficando roxinha,2,F,não,,,,1,Falta de ar,sim,Estridor com cianose em criança.
+C015,desenvolvimento,"Uma dor fortíssima na barriga, a barriga está dura que nem pedra e eu desmaiei",45,M,não,,,,1,Dor abdominal,sim,Abdome agudo com síncope.
+C016,desenvolvimento,"Estou sangrando muito pela vagina, encharco o absorvente a cada meia hora e quase desmaiei",38,F,não,,,,1,Sangramento vaginal,sim,Hemorragia volumosa com instabilidade.
+C017,teste,"Meu filho está com febre, umas manchas roxas que não somem quando aperto e muito sonolento",4,M,não,,,,1,Lesões na pele,sim,Púrpura febril com sonolência (suspeita de meningococcemia).
+C018,desenvolvimento,"Caí de moto, bati a cabeça e meu amigo não está acordando",25,M,não,,,,1,Trauma,não,Trauma craniano com perda de consciência.
+C019,desenvolvimento,Meu pai ficou com um lado do corpo fraco e a fala enrolada faz uns 30 minutos,68,M,não,hipertensão,,,1,Sinais neurológicos,não,Déficit neurológico agudo (suspeita de AVC).
+C020,desenvolvimento,"Fui picado por abelha, o corpo todo empolou, a garganta tá fechando e estou tonto",30,M,não,,,,1,Reação alérgica,sim,Anafilaxia após picada.
+C021,desenvolvimento,"Estou com uma dor moderada no peito faz umas duas horas, sem falta de ar",50,M,não,,,,2,Dor no peito,sim,Dor torácica moderada recente.
+C022,desenvolvimento,"Tenho asma, estou com febre e chiado no peito, a bombinha não está resolvendo",28,F,não,asma,,,2,Falta de ar,sim,Dispneia com febre em asmática.
+C023,desenvolvimento,Dor de cabeça forte com febre alta e não consigo encostar o queixo no peito,19,M,não,,,,2,Dor de cabeça,sim,Cefaleia com febre e rigidez de nuca.
+C024,desenvolvimento,"Estou grávida, com uma dor de cabeça forte e vendo uns pontinhos brilhantes",26,F,sim,,,,2,Dor de cabeça na gestação,sim,Sinais de pré-eclâmpsia.
+C025,desenvolvimento,"Grávida de 37 semanas, contrações fortes e doloridas a cada cinco minutos",30,F,sim,,,,2,Contrações na gestação,sim,Trabalho de parto.
+C026,desenvolvimento,"Estou com 33 semanas e está saindo um líquido pela vagina, sem dor",24,F,sim,,,,2,Perda de líquido na gestação,sim,Ruptura de membranas pré-termo.
+C027,teste,Minha garganta dói tanto que não consigo engolir nem a saliva e estou com febre alta,27,M,não,,,,2,Dor de garganta,sim,Odinofagia intensa com febre alta.
+C028,teste,"Ardor pra fazer xixi, febre e uma dor forte nas costas do lado direito",35,F,não,,,,2,Dor ao urinar,sim,Suspeita de pielonefrite.
+C029,teste,Dor muito forte nas costas que desce pra perna e a perna está ficando fraca,45,M,não,,,,2,Dor nas costas,sim,Lombalgia intensa com déficit motor.
+C030,desenvolvimento,"Vomitando o dia inteiro, boca seca e quase não fiz xixi hoje",70,F,não,,,,2,Diarreia e vômito,sim,Desidratação moderada em idosa.
+C031,desenvolvimento,Dor de barriga moderada e não paro de vomitar desde cedo,33,M,não,,,,2,Dor abdominal,sim,Dor abdominal com vômitos persistentes.
+C032,desenvolvimento,"Tomei um remédio e o corpo todo encheu de placas vermelhas com uma coceira enorme, mas respiro bem",40,F,não,,,,2,Reação alérgica,sim,Urticária generalizada sem acometimento respiratório.
+C033,teste,"Levei uma bolada na cabeça, o ouvido está doendo, saiu um pouco de sangue e estou tonto",15,M,não,,,,2,Dor de ouvido,sim,Otalgia pós-trauma com sangramento e tontura.
+C034,teste,"Espirrou óleo quente na minha mão e no antebraço, fez bolha e dói demais",36,F,não,,,,2,Queimadura,sim,Queimadura de segundo grau com dor intensa.
+C035,teste,"Minha glicose deu 350, estou com muita sede, fazendo muito xixi e fraco",58,M,não,diabetes,,,2,Alteração da glicose,sim,Hiperglicemia sintomática.
+C036,desenvolvimento,A pressão está 19 por 12 e estou com uma dor de cabeça forte,62,F,não,hipertensão,,,2,Pressão alta,sim,Pressão muito elevada com cefaleia intensa.
+C037,desenvolvimento,"Febre há quatro dias, dor de barriga que não passa, vomitando e a gengiva sangrando",22,M,não,,,,2,Suspeita de dengue,sim,Dengue com sinais de alarme.
+C038,teste,"Estou numa crise de ansiedade muito forte, não paro de chorar e às vezes penso em morrer",31,F,não,ansiedade,,,2,Sofrimento mental,sim,"Sofrimento intenso com ideação, sem plano."
+C039,teste,"Meu filho de 3 anos bebeu água sanitária sem querer, está reclamando que a boca arde",3,M,não,,,,2,Intoxicação,sim,Ingestão de cáustico em criança.
+C040,desenvolvimento,"Estou sangrando fora da menstruação, um sangramento médio e com cólica forte",29,F,não,,,,2,Sangramento vaginal,sim,Sangramento moderado com dor.
+C041,desenvolvimento,"Cortei a mão com faca, o corte é fundo e não para de sangrar mesmo apertando",41,M,não,,,,2,Corte,não,Hemorragia não controlada por compressão.
+C042,teste,"Estou gripado com febre alta e um pouco de falta de ar, tenho problema no coração",78,M,não,insuficiência cardíaca,,,2,Sintomas de gripe,sim,Síndrome gripal em idoso com comorbidade.
+C043,desenvolvimento,Febre há dois dias e dor de garganta,31,F,não,,,,3,Dor de garganta,sim,"Faringite com febre, sem sinais de gravidade."
+C044,teste,"Ardor leve pra fazer xixi desde ontem, sem febre",26,F,não,,,,3,Dor ao urinar,sim,Disúria leve sem sinais sistêmicos.
+C045,teste,Meu filho está com dor de ouvido e uma febre baixa desde ontem,8,M,não,,,,3,Dor de ouvido,sim,Otalgia com febre baixa em criança.
+C046,teste,Estou com uma dor de cabeça leve desde hoje cedo,35,F,não,,,,3,Dor de cabeça,sim,Cefaleia leve sem sinais de alerta.
+C047,desenvolvimento,"Febre, tosse e dor no corpo há dois dias",29,M,não,,,,3,Sintomas de gripe,sim,Síndrome gripal sem fatores de risco.
+C048,desenvolvimento,"Fui ao banheiro com diarreia umas quatro vezes hoje, sem sangue, e estou bebendo bastante água",40,F,não,,,,3,Diarreia e vômito,sim,Diarreia aguda sem desidratação.
+C049,desenvolvimento,Uma cólica leve na barriga desde ontem,22,F,não,,,,3,Dor abdominal,sim,Dor abdominal leve recente.
+C050,desenvolvimento,"Comecei com dor nas costas depois de carregar peso, dá pra andar normal",38,M,não,,,,3,Dor nas costas,sim,Lombalgia mecânica sem déficit.
+C051,teste,Apareceram umas manchas vermelhas no braço que coçam um pouco,27,F,não,,,,3,Lesões na pele,sim,Lesão cutânea com prurido leve.
+C052,desenvolvimento,"Uma dor leve no peito quando respiro fundo, sem outros sintomas",30,M,não,,,,3,Dor no peito,sim,"Dor torácica leve, sem sinais associados."
+C053,desenvolvimento,"Um pouco de falta de ar com tosse faz três dias, sem febre alta",35,F,não,,,,3,Falta de ar,sim,Dispneia leve sem sinais de gravidade.
+C054,teste,Estou grávida e com febre de 38 graus e dor no corpo,28,F,sim,,,,3,Febre na gestação,sim,Febre na gestação.
+C055,teste,"Grávida, sentindo ardor quando faço xixi",23,F,sim,,,,3,Dor ao urinar na gestação,sim,Disúria na gestação.
+C056,desenvolvimento,"Estou grávida e acordo com os pés, as pernas e o rosto muito inchados",29,F,sim,,,,3,Inchaço na gestação,sim,Edema importante na gestação.
+C057,teste,A pressão deu 16 por 10 e estou com uma dor de cabeça leve,55,M,não,hipertensão,,,3,Pressão alta,sim,Pressão elevada com sintoma leve.
+C058,desenvolvimento,Minha glicose deu 280 hoje e estou com um pouco de sede,60,F,não,diabetes,,,3,Alteração da glicose,sim,Hiperglicemia com sintomas leves.
+C059,desenvolvimento,"Febre há dois dias, dor atrás dos olhos e dor no corpo",33,F,não,,,,3,Suspeita de dengue,sim,Dengue sem sinais de alarme.
+C060,teste,Dor de dente forte e o rosto do lado do dente está inchado,37,M,não,,,,3,Dor de dente,não,Odontalgia com edema facial.
+C061,desenvolvimento,"Cortei o dedo com uma faca, o sangramento parou mas o corte é fundo e acho que precisa de ponto",29,F,não,,,,3,Corte,não,"Ferimento que precisa de sutura, sangramento controlado."
+C062,teste,"Tenho epilepsia, tive uma convulsão rápida faz uma hora e já estou normal",25,M,não,epilepsia,,,3,Crise convulsiva,sim,Crise convulsiva breve com recuperação completa.
+C063,desenvolvimento,"Um sangramento pequeno fora da menstruação, sem dor",32,F,não,,,,3,Sangramento vaginal,sim,Sangramento leve sem dor.
+C064,desenvolvimento,Tosse com catarro amarelo e febre baixa faz quatro dias,45,M,não,tabagismo,,,3,Sintomas de gripe,sim,Infecção respiratória sem sinais de gravidade.
+C065,desenvolvimento,"Minha filha de 5 anos está com diarreia e febre baixa, mas está brincando e bebendo água",5,F,não,,,,3,Diarreia e vômito,sim,Diarreia febril em criança hidratada.
+C066,desenvolvimento,Dor nas costas faz três dias que não melhora com remédio,50,F,não,,,,3,Dor nas costas,sim,Lombalgia persistente sem sinais de alerta.
+C067,teste,"Fui picado por um inseto, ficou vermelho e bem inchado no lugar, mas respiro normal",34,M,não,,,,3,Reação a picada,sim,Reação local extensa sem sinais sistêmicos.
+C068,desenvolvimento,"Torci o tornozelo jogando bola, está inchado mas consigo pisar",24,M,não,,,,4,Entorse,não,Entorse leve com apoio preservado.
+C069,desenvolvimento,Meu olho está vermelho e com remela desde ontem,30,F,não,,,,4,Conjuntivite,não,Conjuntivite sem perda visual.
+C070,teste,Espirrando muito e com o olho coçando depois de limpar a casa com poeira,26,M,não,rinite,,,4,Rinite alérgica,sim,Rinite alérgica sem sinais de gravidade.
+C071,teste,"Ando muito triste há semanas, sem vontade de fazer nada, mas não penso em me machucar",41,F,não,,,,4,Sofrimento mental,sim,Sintomas depressivos sem risco imediato.
+C072,desenvolvimento,"A garganta está só arranhando, sem febre",24,F,não,,,,4,Dor de garganta,sim,Desconforto faríngeo leve.
+C073,teste,"Dor leve no ouvido depois de nadar na piscina, sem febre",12,F,não,,,,4,Dor de ouvido,sim,Otalgia leve sem febre.
+C074,desenvolvimento,"Tenho enxaqueca há anos, hoje estou sem dor, queria acompanhamento",40,M,não,enxaqueca,,,4,Dor de cabeça,sim,Histórico de cefaleia sem sintomas atuais.
+C075,desenvolvimento,"Já tive uma alergia forte a camarão no passado, hoje estou bem e quero orientação",33,F,não,,,,4,Reação alérgica,sim,Histórico de alergia sem sintomas atuais.
+C076,teste,"Tenho psoríase, hoje não estou com nenhuma lesão, queria rever o tratamento",50,M,não,psoríase,,,4,Lesões na pele,sim,Histórico de doença de pele sem sintomas atuais.
+C077,desenvolvimento,"Tenho epilepsia, não tenho crise há meses, mas meu remédio está acabando",36,F,não,epilepsia,,,4,Crise convulsiva,sim,Histórico de convulsão sem crise atual.
+C078,desenvolvimento,Uma verruga na sola do pé que incomoda pra andar,22,M,não,,,,4,Verruga,não,Queixa crônica sem gravidade.
+C079,teste,"Dor nas costas há meses, igual sempre, sem piorar",58,F,não,,,,4,Dor nas costas,sim,Lombalgia crônica estável.
+C080,teste,"Medi a pressão em casa e deu 14 por 9, não sinto nada",47,M,não,,,,4,Pressão alta,sim,Pressão discretamente elevada sem sintomas.
+C081,teste,"Unha do dedão encravada, vermelha em volta, sem pus",19,M,não,,,,4,Unha encravada,não,Unha encravada sem infecção.
+C082,teste,As espinhas no rosto estão piorando,16,F,não,,,,4,Lesões na pele,sim,Acne sem sinais de gravidade.
+C083,desenvolvimento,Uma pinta nas costas mudou de cor nos últimos meses,52,M,não,,,,4,Lesões na pele,sim,Lesão pigmentada com mudança: avaliação eletiva.
+C084,desenvolvimento,Sinto queimação no estômago depois de comer há algumas semanas,44,M,não,,,,4,Azia,não,Dispepsia crônica.
+C085,desenvolvimento,"Ando cansada há um mês, sem outros sintomas",36,F,não,,,,4,Cansaço,não,Fadiga sem sinais de alerta.
+C086,desenvolvimento,O joelho dói quando subo escada faz meses,63,F,não,,,,4,Dor no joelho,não,Dor articular crônica.
+C087,desenvolvimento,"Faz cinco dias que não consigo evacuar, sem dor forte",70,F,não,,,,4,Prisão de ventre,não,Constipação sem sinais de alarme.
+C088,desenvolvimento,"Nariz escorrendo e espirrando desde ontem, sem febre",28,M,não,,,,5,Sintomas de gripe,sim,Resfriado comum sem febre.
+C089,desenvolvimento,"Quero renovar a receita do meu remédio de pressão, estou sem nenhuma queixa",60,F,não,hipertensão,,,5,Renovação de receita,não,Demanda administrativa.
+C090,desenvolvimento,Queria saber se posso tomar a vacina da gripe,35,F,não,,,,5,Dúvida sobre vacina,não,Dúvida sem queixa clínica.
+C091,teste,Umas picadas de mosquito na perna que estão coçando,20,M,não,,,,5,Picada de mosquito,não,Prurido local leve.
+C092,teste,"Cortei o dedo com papel, já parou de sangrar",25,F,não,,,,5,Corte superficial,não,Ferimento superficial resolvido.
+C093,teste,Dor nas pernas depois do treino de ontem na academia,23,M,não,,,,5,Dor muscular,não,Dor muscular tardia.
+C094,desenvolvimento,"Meu filho caiu de bicicleta e ralou o joelho, sangrou pouco e já limpei",10,M,não,,,,5,Escoriação,não,Escoriação superficial.
+C095,desenvolvimento,Dor de cabeça leve e enjoo depois de beber ontem à noite,27,M,não,,,,5,Dor de cabeça,sim,Sintomas de ressaca.
+C096,teste,"Peguei sol demais, a pele está vermelha mas sem bolha",31,F,não,,,,5,Queimadura,sim,Queimadura solar de primeiro grau.
+C097,desenvolvimento,Uma afta na boca faz dois dias,29,F,não,,,,5,Afta,não,Úlcera oral simples.
+C098,teste,"Fiquei rouco depois de gritar num show, sem febre",22,M,não,,,,5,Dor de garganta,sim,Rouquidão por esforço vocal.
+C099,desenvolvimento,Estou dormindo mal nas últimas noites,45,F,não,,,,5,Insônia,não,Insônia ocasional.
+C100,desenvolvimento,Coceira e a pele soltando entre os dedos do pé,33,M,não,,,,5,Micose,sim,Micose interdigital.

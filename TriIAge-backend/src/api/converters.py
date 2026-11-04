@@ -102,6 +102,12 @@ def classification_out(c: Classification) -> ClassificationOut:
             source=record.source, source_url=record.source_url,
         ) if record else None,
         model=c.model,
+        origin=c.origin,
+        divergent=c.divergent,
+        model_level=c.model_level,
+        rules_level=c.rules_level,
+        decision_path=c.decision_path or [],
+        duration_ms=c.duration_ms,
     )
 
 
